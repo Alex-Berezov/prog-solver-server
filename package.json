@@ -1,0 +1,18 @@
+{
+  "name": "prog-solver-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.5.0",
+    "mongoose": "^6.5.1",
+    "nodemon": "^2.0.19"
+  }
+}
