@@ -25,13 +25,15 @@ const root = {
   },
   addTask: async ({ input }) => {
     try {
-      const { taskId, title, text, languages, solutions, imgUrl, imgAuthor, likes } = input
+      const {
+        taskId, title, text, languages, solutionsList: [lang, solutions], imgUrl, imgAuthor, likes
+      } = input
       const taskSlug = title.toLowerCase().split(' ').join('-')
 
       const taskFetched = await Task.findOne({taskSlug}) // Разобраться, как возвращать ошибку по правильному
       if (taskFetched) return console.log('Task already exist')
 
-      const task = new Task({ taskId, title, text, languages, solutions, imgUrl, imgAuthor, likes })
+      const task = new Task({ taskId, title, text, languages, solutionsList: [lang, solutions], imgUrl, imgAuthor, likes })
       const newTask = await task.save()
       return { ...newTask._doc, taskSlug: newTask.taskSlug }
     } catch (error) {
