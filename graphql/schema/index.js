@@ -13,7 +13,7 @@ const schema = buildSchema(`
     title: String
     text: String
     languages: [String]
-    solutionsList: [Solutions]
+    solutionsList: [Solutions!]
     imgUrl: String
     imgAuthor: String
     likes: Int
@@ -27,16 +27,27 @@ const schema = buildSchema(`
   input TaskInput {
     taskId: String
     title: String
+    taskSlug: String
     text: String
     languages: [String]
-    solutionsList: [SolutionsInput]
+    solutionsList: [SolutionsInput!]
     imgUrl: String
     imgAuthor: String
     likes: Int
   }
 
+  input TaskUpdateInput {
+    title: String
+    text: String
+    languages: [String]
+    solutionsList: [SolutionsInput!]
+    imgUrl: String
+    imgAuthor: String
+  }
+
   type Mutation {
     addTask(input: TaskInput): Task,
+    updateTask(taskSlug: String, input: TaskUpdateInput): Task,
     deleteTask(taskSlug: String): Task,
   }
 
