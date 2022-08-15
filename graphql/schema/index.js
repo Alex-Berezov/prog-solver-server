@@ -1,6 +1,14 @@
 import { buildSchema } from 'graphql'
 
 const schema = buildSchema(`
+  type User {
+    id: ID!
+    email: String!
+    token: String!
+    username: String!
+    createdAt: String!
+  }
+
   type Solutions {
     lang: String
     solutions: [String]
@@ -17,6 +25,13 @@ const schema = buildSchema(`
     imgUrl: String
     imgAuthor: String
     likes: Int
+  }
+
+  input RegisterInput {
+    username: String!
+    password: String!
+    confirmPassword: String!
+    email: String!
   }
 
   input SolutionsInput {
@@ -46,6 +61,8 @@ const schema = buildSchema(`
   }
 
   type Mutation {
+    register (registerInput: RegisterInput): User!
+    login (username: String!, password: String!): User!
     addTask(input: TaskInput): Task,
     updateTask(taskSlug: String, input: TaskUpdateInput): Task,
     deleteTask(taskSlug: String): Task,
