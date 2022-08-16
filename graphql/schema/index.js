@@ -5,7 +5,6 @@ const schema = buildSchema(`
     id: ID!
     email: String!
     token: String!
-    username: String!
     createdAt: String!
   }
 
@@ -28,10 +27,10 @@ const schema = buildSchema(`
   }
 
   input RegisterInput {
-    username: String!
     password: String!
     confirmPassword: String!
     email: String!
+    approved: Boolean
   }
 
   input SolutionsInput {
