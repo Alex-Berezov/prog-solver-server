@@ -1,4 +1,5 @@
 import Task from "../../models/Task.js"
+import User from '../../models/User.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { UserInputError } from 'apollo-server'
@@ -14,7 +15,7 @@ const generateToken = (user) => {
 }
 
 const root = {
-  register: async (_, { registerInput: { email, password, confirmPassword } }) => {
+  registration: async ({ input: { email, password, confirmPassword } }) => {
     try {
       // req data validation
       const { valid, errors } = validateRegisterInput(email, password, confirmPassword)
@@ -36,7 +37,8 @@ const root = {
       const newUser = new User ({
           email,
           password,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          approved: false
       })
       const result = await newUser.save()
       const token = generateToken(result)
