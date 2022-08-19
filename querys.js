@@ -68,8 +68,8 @@ mutation {
 mutation  {
   registration(input: {
     email: "test@test.com",
-    password: "12345",
-    confirmPassword: "12345"
+    password: "123",
+    confirmPassword: "123"
   }) {
     id, email, password, token
   }

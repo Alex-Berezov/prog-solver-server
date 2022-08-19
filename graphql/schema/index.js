@@ -62,7 +62,7 @@ const schema = buildSchema(`
 
   type Mutation {
     registration (input: RegistrationInput): User!
-    login (username: String!, password: String!): User!
+    login (email: String!, password: String!): User!
     addTask(input: TaskInput): Task,
     updateTask(taskSlug: String, input: TaskUpdateInput): Task,
     deleteTask(taskSlug: String): Task,

@@ -52,7 +52,7 @@ const root = {
       throw new UserInputError('Registration error', { error })
     }
   },
-  login: async (_, { email, password }) => {
+  login: async ({ email, password }) => {
     try {
       const { valid, errors } = validateLoginInput(email, password)
       if (!valid) {
@@ -71,6 +71,13 @@ const root = {
       if (!match) {
           errors.general = "Wrong credentials."
           throw new UserInputError('Wrong credentials.', { errors })
+      }
+
+      //approved
+      const approved = user.approved
+      if (!approved) {
+        errors.general = "Not approved."
+        throw new UserInputError('Not approved.', { errors })
       }
 
       // sending a token back
