@@ -5,8 +5,12 @@ const schema = buildSchema(`
     id: ID!
     email: String!
     password: String!
-    token: String!
+    token: String
     createdAt: String!
+    approved: Boolean
+  }
+
+  type Auth {
     approved: Boolean
   }
 
@@ -29,9 +33,19 @@ const schema = buildSchema(`
   }
 
   input RegistrationInput {
+    email: String!
     password: String!
     confirmPassword: String!
+  }
+
+  input LoginInput {
     email: String!
+    password: String!
+  }
+
+  input AuthInput {
+    email: String!
+    token: String!
   }
 
   input SolutionsInput {
@@ -62,7 +76,8 @@ const schema = buildSchema(`
 
   type Mutation {
     registration (input: RegistrationInput): User!
-    login (email: String!, password: String!): User!
+    login (input: LoginInput): User!
+    auth (input: AuthInput): Auth!
     addTask(input: TaskInput): Task,
     updateTask(taskSlug: String, input: TaskUpdateInput): Task,
     deleteTask(taskSlug: String): Task,

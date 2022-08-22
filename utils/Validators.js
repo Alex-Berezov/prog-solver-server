@@ -36,3 +36,18 @@ export const validateLoginInput = (email, password) => {
       valid: Object.keys(errors).length < 1
   }
 }
+
+export const validateAuthInput = (email, token) => {
+  const errors = {};
+  if (email.trim() === '') {
+      errors.email = "Email must not be empty.";
+  }
+  if (token.trim() === '') {
+      errors.password = "Password must not be empty.";
+  }
+
+  return {
+      errors,
+      valid: Object.keys(errors).length < 1
+  }
+}

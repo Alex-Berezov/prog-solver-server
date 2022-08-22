@@ -4,17 +4,64 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { UserInputError } from 'apollo-server'
 import 'dotenv/config'
+import { validateRegisterInput, validateLoginInput, validateAuthInput } from '../../utils/Validators.js'
 
-import { validateRegisterInput, validateLoginInput } from '../../utils/Validators.js'
+const secret = process.env.SECRET
 
 const generateToken = (user) => {
   return jwt.sign({
     _id: user._id,
     email: user.email
-  }, process.env.SECRET, { expiresIn: '1h'})
+  }, secret, { expiresIn: '1h'})
+}
+
+// Function for verifying JWT
+const verifyJwt = (jwtToken, secret) => {
+  return new Promise((resolve, reject) => {
+      jwt.verify(jwtToken, secret, function(err, decoded) {
+          if (err) {
+              reject(err)
+          } else {
+              resolve(decoded)
+          }
+      })
+  })
 }
 
 const root = {
+  auth: async ({ input: { email, token } }) => {
+    try {
+      const { valid, errors } = validateAuthInput(email, token)
+      if (!valid) {
+          throw new UserInputError('Errors' , { errors })
+      }
+      
+      // getting a user from mongodb
+      const user = await User.findOne({ email })
+      if (!user) {
+          errors.general = "User not found"
+          throw new UserInputError('User not found', { errors })
+      }
+
+      //verifying JWT
+      const verified = await verifyJwt(token, secret)
+      if (!verified) {
+        errors.general = "Not verified."
+        throw new UserInputError('Not verified.', { errors })
+      }
+
+      //approved
+      const approved = user.approved
+      if (!approved) {
+        errors.general = "Not approved."
+        throw new UserInputError('Not approved.', { errors })
+      }
+
+      return { approved }
+    } catch (error) {
+      throw new UserInputError('Auth error', { error })
+    }
+  },
   registration: async ({ input: { email, password, confirmPassword } }) => {
     try {
       // req data validation
@@ -52,7 +99,7 @@ const root = {
       throw new UserInputError('Registration error', { error })
     }
   },
-  login: async ({ email, password }) => {
+  login: async ({ input: { email, password } }) => {
     try {
       const { valid, errors } = validateLoginInput(email, password)
       if (!valid) {
