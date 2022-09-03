@@ -21,6 +21,7 @@ const schema = buildSchema(`
 
   type Task {
     _id: ID
+    created: String
     taskId: String
     taskSlug: String
     title: String

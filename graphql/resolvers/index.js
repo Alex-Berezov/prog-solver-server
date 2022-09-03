@@ -12,7 +12,7 @@ const generateToken = (user) => {
   return jwt.sign({
     _id: user._id,
     email: user.email
-  }, secret, { expiresIn: '1h'})
+  }, secret, { expiresIn: '1d'})
 }
 
 // Function for verifying JWT
@@ -166,7 +166,13 @@ const root = {
       const taskFetched = await Task.findOne({taskSlug}) // Разобраться, как возвращать ошибку по правильному
       if (taskFetched) throw 'Task already exist!'
 
-      const task = new Task({ ...input, taskSlug })
+      const date = new Date()
+      const day = date.getDate() <= 9 ? `0${date.getDate()}` : `${date.getDate()}`
+      const month = date.getMonth() <= 9 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`
+      const year = `${date.getFullYear()}`
+      const created = `${day}.${month}.${year}`
+
+      const task = new Task({ ...input, taskSlug, created })
       const newTask = await task.save()
       return { ...newTask._doc, taskSlug: newTask.taskSlug }
     } catch (error) {
