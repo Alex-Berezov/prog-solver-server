@@ -14,23 +14,25 @@ const schema = buildSchema(`
     approved: Boolean
   }
 
-  type Solutions {
+  input Solutions {
+    id: String
+    solution: String
+  }
+
+  input SolutionsInput {
     lang: String
-    solutions: [String]
+    solutions: [Solutions]
   }
 
   type Task {
     _id: ID
     created: String
-    taskId: String
     taskSlug: String
     title: String
     text: String
-    languages: [String]
-    solutionsList: [Solutions!]
+    solutionsList: [Solutions]
     imgUrl: String
     imgAuthor: String
-    likes: Int
   }
 
   input RegistrationInput {
@@ -49,28 +51,19 @@ const schema = buildSchema(`
     token: String!
   }
 
-  input SolutionsInput {
-    lang: String
-    solutions: [String]
-  }
-
   input TaskInput {
-    taskId: String
     title: String
     taskSlug: String
     text: String
-    languages: [String]
-    solutionsList: [SolutionsInput!]
+    solutionsList: [SolutionsInput]
     imgUrl: String
     imgAuthor: String
-    likes: Int
   }
 
   input TaskUpdateInput {
     title: String
     text: String
-    languages: [String]
-    solutionsList: [SolutionsInput!]
+    solutionsList: [SolutionsInput]
     imgUrl: String
     imgAuthor: String
   }
