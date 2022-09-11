@@ -14,6 +14,16 @@ const schema = buildSchema(`
     approved: Boolean
   }
 
+  type SolutionsType {
+    id: String
+    solution: String
+  }
+
+  type SolutionsList {
+    lang: String
+    solutions: SolutionsType
+  }
+
   input Solutions {
     id: String
     solution: String
@@ -30,7 +40,7 @@ const schema = buildSchema(`
     taskSlug: String
     title: String
     text: String
-    solutionsList: [Solutions]
+    solutionsList: [SolutionsList]
     imgUrl: String
     imgAuthor: String
   }
@@ -64,8 +74,6 @@ const schema = buildSchema(`
     title: String
     text: String
     solutionsList: [SolutionsInput]
-    imgUrl: String
-    imgAuthor: String
   }
 
   type Mutation {
