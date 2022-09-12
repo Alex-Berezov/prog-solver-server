@@ -21,17 +21,7 @@ const schema = buildSchema(`
 
   type SolutionsList {
     lang: String
-    solutions: SolutionsType
-  }
-
-  input Solutions {
-    id: String
-    solution: String
-  }
-
-  input SolutionsInput {
-    lang: String
-    solutions: [Solutions]
+    solutions: [SolutionsType]
   }
 
   type Task {
@@ -43,6 +33,16 @@ const schema = buildSchema(`
     solutionsList: [SolutionsList]
     imgUrl: String
     imgAuthor: String
+  }
+
+  input Solutions {
+    id: String
+    solution: String
+  }
+
+  input SolutionsInput {
+    lang: String
+    solutions: [Solutions]
   }
 
   input RegistrationInput {

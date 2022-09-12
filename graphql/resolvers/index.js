@@ -142,6 +142,7 @@ const root = {
   getAllTasks: async () => {
     try {
       const tasksFetched = await Task.find()
+
       return tasksFetched.map(task => {
         return {
           ...task._doc,
@@ -182,8 +183,8 @@ const root = {
   updateTask: async ({ taskSlug, input }) => {
     try {
       const updatedTaskSlug = input.title.toLowerCase().split(' ').join('-')
-      const taskFetched = await Task.findOne({taskSlug: updatedTaskSlug})
-      if (taskFetched) throw 'Task already exist!'
+      // const taskFetched = await Task.findOne({taskSlug: updatedTaskSlug})
+      // if (taskFetched) throw 'Task already exist!'
 
       const updatedTask = new Task({ ...input, taskSlug: updatedTaskSlug })
       await Task.findOneAndUpdate(taskSlug, { ...input, taskSlug: updatedTaskSlug })
