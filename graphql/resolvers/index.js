@@ -182,13 +182,9 @@ const root = {
   },
   updateTask: async ({ taskSlug, input }) => {
     try {
-      const updatedTaskSlug = input.title.toLowerCase().split(' ').join('-')
-      // const taskFetched = await Task.findOne({taskSlug: updatedTaskSlug})
-      // if (taskFetched) throw 'Task already exist!'
-
-      const updatedTask = new Task({ ...input, taskSlug: updatedTaskSlug })
-      await Task.findOneAndUpdate(taskSlug, { ...input, taskSlug: updatedTaskSlug })
-      return { ...updatedTask._doc, taskSlug: updatedTask.taskSlug }
+      const taskFetched = await Task.findOne({taskSlug})
+      const updatedTask = await Task.findByIdAndUpdate(taskFetched._id, {...input})
+      return { ...updatedTask._doc, taskSlug }
     } catch (error) {
       console.log('Update task error on server >>', error)
     }
