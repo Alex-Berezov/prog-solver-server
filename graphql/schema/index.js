@@ -82,7 +82,7 @@ const schema = buildSchema(`
     auth (input: AuthInput): Auth!
     addTask(input: TaskInput): Task,
     updateTask(taskSlug: String, input: TaskUpdateInput): Task,
-    deleteTask(taskSlug: String): Task,
+    deleteTask(taskId: String): Task,
   }
 
   type Query {

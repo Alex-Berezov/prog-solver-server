@@ -189,12 +189,11 @@ const root = {
       console.log('Update task error on server >>', error)
     }
   },
-  deleteTask: async ({ taskSlug }) => {
+  deleteTask: async (id) => {
     try {
-      const deletedTask = await Task.findOneAndDelete({taskSlug})
+      const deletedTask = await Task.findByIdAndDelete(id.taskId)
       return {
         ...deletedTask._doc,
-        taskSlug: deletedTask.taskSlug,
       }
     } catch (error) {
       console.log('Delete task error on server >>', error)
