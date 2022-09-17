@@ -86,7 +86,7 @@ const schema = buildSchema(`
   }
 
   type Query {
-    getAllTasks: [Task!]
+    getAllTasks(offset: Int, limit: Int): [Task!]
     getTask(taskSlug: String): Task
   }
 `)
