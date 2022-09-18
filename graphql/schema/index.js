@@ -1,6 +1,7 @@
-import { buildSchema } from 'graphql'
+// import { buildSchema } from 'graphql'
+import { gql } from 'apollo-server-express';
 
-const schema = buildSchema(`
+const schema = gql`
   type User {
     id: ID!
     email: String!
@@ -86,9 +87,9 @@ const schema = buildSchema(`
   }
 
   type Query {
-    getAllTasks(offset: Int, limit: Int): [Task!]
+    getAllTasks(first: Int, after: String): [Task!]
     getTask(taskSlug: String): Task
   }
-`)
+`
 
 export default schema
