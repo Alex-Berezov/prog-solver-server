@@ -76,23 +76,32 @@ mutation  {
 }
 
 
-query {
-  getAllTasks {
-    _id
-    taskId
-    taskSlug
-    title
-    text
-    languages
-    solutionsList {
-      lang
-      solutions
+query getAllTasks($first: Int, $after: String) {
+  getAllTasks(first: $first, after: $after) {
+    pageInfo {
+      endCursor
+      hasNextPage
     }
-    imgUrl
-    imgAuthor
-    likes
+    edges {
+      cursor
+      node {
+        _id
+        created
+        taskSlug
+        title
+        text
+        solutionsList {
+          lang
+          solutions {
+            id
+            solution
+          }
+        }
+      }
+    }
   }
 }
+
 
 query {
   getTask(taskSlug: "new-task-2") {

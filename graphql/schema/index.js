@@ -1,7 +1,7 @@
-// import { buildSchema } from 'graphql'
-import { gql } from 'apollo-server-express';
+import { buildSchema } from 'graphql'
+import { gql } from 'apollo-server-express'
 
-const schema = gql`
+const schema = buildSchema(`
   type User {
     id: ID!
     email: String!
@@ -34,6 +34,21 @@ const schema = gql`
     solutionsList: [SolutionsList]
     imgUrl: String
     imgAuthor: String
+  }
+
+  type Edge {
+    cursor: String
+    node: Task
+  }
+
+  type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean
+  }
+
+  type Response {
+    edges: [Edge]
+    pageInfo: PageInfo
   }
 
   input Solutions {
@@ -87,9 +102,9 @@ const schema = gql`
   }
 
   type Query {
-    getAllTasks(first: Int, after: String): [Task!]
+    getAllTasks(first: Int, after: String): Response
     getTask(taskSlug: String): Task
   }
-`
+`)
 
 export default schema

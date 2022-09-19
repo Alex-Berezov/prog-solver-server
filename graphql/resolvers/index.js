@@ -139,18 +139,53 @@ const root = {
       throw new UserInputError('Login error', { error })
     }
   },
-  getAllTasks: async () => {
+  getAllTasks: async (parent, args) => {
     try {
       const tasksFetched = await Task.find()
 
-      return tasksFetched.map(task => {
-        return {
-          ...task._doc,
-          taskSlug: task.taskSlug
+      // initialise first
+      let first = 5
+      if (args.first) {
+        const minValue = 1
+        const maxValue = 25
+        if (args.first < minValue || args.first > maxValue) {
+          throw new UserInputError(
+            `Invalid limit value (min value: ${minValue}, max: ${maxValue})`
+          )
         }
-      })
+        first = args.first
+      }
+
+      // initialise cursor
+      let after = 0
+      if (args.after) {
+        const index = tasksFetched.findIndex(item => item._id === args.after)
+        if (index === -1) {
+          throw new UserInputError(`Invalid after value: cursor not found.`)
+        }
+        after = index + 1
+        if (after === tasksFetched.length) {
+          throw new UserInputError(
+            `Invalid after value: no items after provided cuesor.`
+          )
+        }
+      }
+
+      const tasks = tasksFetched.slice(after, after + first)
+      const lastTask = tasks[tasks.length - 1]
+
+      return {
+        pageInfo: {
+          endCursor: lastTask._id,
+          hasNextPage: after + first < tasksFetched.length
+        },
+        edges: tasks.map(task => ({
+          cursor: task._id,
+          node: task
+        }))
+      }
     } catch (error) {
-      console.log('Get tasks error on server >>', error)
+      throw new UserInputError('Get tasks error on server >>', { error })
     }
   },
   getTask: async ({ taskSlug }) => {
@@ -158,7 +193,7 @@ const root = {
       const taskFetched = await Task.findOne({taskSlug})
       return taskFetched
     } catch (error) {
-      console.log('Get single task error on server >>', error)
+      throw new UserInputError('Get single task error on server >>', { error })
     }
   },
   addTask: async ({ input }) => {
@@ -177,7 +212,7 @@ const root = {
       const newTask = await task.save()
       return { ...newTask._doc, taskSlug: newTask.taskSlug }
     } catch (error) {
-      console.log('Add task error on server >>', error)
+      throw new UserInputError('Add task error on server >>', { error })
     }
   },
   updateTask: async ({ taskSlug, input }) => {
@@ -186,7 +221,7 @@ const root = {
       const updatedTask = await Task.findByIdAndUpdate(taskFetched._id, {...input})
       return { ...updatedTask._doc, taskSlug }
     } catch (error) {
-      console.log('Update task error on server >>', error)
+      throw new UserInputError('Update task error on server >>', { error })
     }
   },
   deleteTask: async (id) => {
@@ -196,7 +231,7 @@ const root = {
         ...deletedTask._doc,
       }
     } catch (error) {
-      console.log('Delete task error on server >>', error)
+      throw new UserInputError('Delete task error on server >>', { error })
     }
   },
 }
