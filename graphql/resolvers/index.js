@@ -140,6 +140,9 @@ const root = {
     }
   },
   getAllTasks: async (parent, args) => {
+    console.log('====================================');
+    console.log('args >>', args.body.variables);
+    console.log('====================================');
     try {
       const tasksFetched = await Task.find()
 
@@ -171,8 +174,16 @@ const root = {
         }
       }
 
+      // console.log('====================================');
+      // console.log('tasksFetched >>', tasksFetched);
+      // console.log('====================================');
+
       const tasks = tasksFetched.slice(after, after + first)
       const lastTask = tasks[tasks.length - 1]
+
+      // console.log('====================================');
+      // console.log('tasks >>', tasks);
+      // console.log('====================================');
 
       return {
         pageInfo: {

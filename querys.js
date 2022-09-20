@@ -103,6 +103,7 @@ query getAllTasks($first: Int, $after: String) {
 }
 
 
+
 query {
   getTask(taskSlug: "new-task-2") {
     title taskSlug languages
