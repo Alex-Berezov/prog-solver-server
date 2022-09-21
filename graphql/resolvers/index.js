@@ -140,55 +140,21 @@ const root = {
     }
   },
   getAllTasks: async (parent, args) => {
-    console.log('====================================');
-    console.log('args >>', args.body.variables);
-    console.log('====================================');
     try {
       const tasksFetched = await Task.find()
 
-      // initialise first
-      let first = 5
-      if (args.first) {
-        const minValue = 1
-        const maxValue = 25
-        if (args.first < minValue || args.first > maxValue) {
-          throw new UserInputError(
-            `Invalid limit value (min value: ${minValue}, max: ${maxValue})`
-          )
-        }
-        first = args.first
-      }
+      const first = args.body.variables.first || 5
+      const after = args.body.variables.after || ''
+      const index = tasksFetched.findIndex(item => item._id == after)
+      const offset = index + 1
 
-      // initialise cursor
-      let after = 0
-      if (args.after) {
-        const index = tasksFetched.findIndex(item => item._id === args.after)
-        if (index === -1) {
-          throw new UserInputError(`Invalid after value: cursor not found.`)
-        }
-        after = index + 1
-        if (after === tasksFetched.length) {
-          throw new UserInputError(
-            `Invalid after value: no items after provided cuesor.`
-          )
-        }
-      }
-
-      // console.log('====================================');
-      // console.log('tasksFetched >>', tasksFetched);
-      // console.log('====================================');
-
-      const tasks = tasksFetched.slice(after, after + first)
+      const tasks = tasksFetched.slice(0, offset + first)
       const lastTask = tasks[tasks.length - 1]
-
-      // console.log('====================================');
-      // console.log('tasks >>', tasks);
-      // console.log('====================================');
 
       return {
         pageInfo: {
           endCursor: lastTask._id,
-          hasNextPage: after + first < tasksFetched.length
+          hasNextPage: offset + first < tasksFetched.length
         },
         edges: tasks.map(task => ({
           cursor: task._id,
