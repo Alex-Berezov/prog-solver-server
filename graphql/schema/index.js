@@ -98,12 +98,13 @@ const schema = buildSchema(`
     auth (input: AuthInput): Auth!
     addTask(input: TaskInput): Task,
     updateTask(taskSlug: String, input: TaskUpdateInput): Task,
-    deleteTask(taskId: String): Task,
+    deleteTask(taskId: String): Task
   }
 
   type Query {
     getAllTasks(first: Int, after: String): Response
-    getTask(taskSlug: String): Task
+    getTask(taskSlug: String): Task,
+    searchTask(title: String): Response
   }
 `)
 

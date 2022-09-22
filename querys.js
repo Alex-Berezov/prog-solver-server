@@ -109,3 +109,29 @@ query {
     title taskSlug languages
   }
 }
+
+query searchTask ($title: String) {
+  searchTask (title: $title) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      cursor
+      node {
+        _id
+        created
+        taskSlug
+        title
+        text
+        solutionsList {
+          lang
+          solutions {
+            id
+            solution
+          }
+        }
+      }
+    }
+  }
+}

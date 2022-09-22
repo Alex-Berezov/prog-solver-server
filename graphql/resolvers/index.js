@@ -211,6 +211,24 @@ const root = {
       throw new UserInputError('Delete task error on server >>', { error })
     }
   },
+  searchTask: async ({ title }) => {
+    try {
+      const tasksFetched = await Task.find({ title: { $regex: title, $options: 'i' } })
+
+      return {
+        pageInfo: {
+          endCursor: 0,
+          hasNextPage: false
+        },
+        edges: tasksFetched.map(task => ({
+          cursor: 0,
+          node: task
+        }))
+      }
+    } catch (error) {
+      throw new UserInputError('Search task error on server >>', { error })
+    }
+  }
 }
 
 export default root
