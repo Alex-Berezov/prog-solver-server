@@ -143,7 +143,7 @@ const root = {
     try {
       const tasksFetched = await Task.find()
 
-      const first = args.body.variables.first || 5
+      const first = args.body.variables.first || 6
       const after = args.body.variables.after || ''
       const index = tasksFetched.findIndex(item => item._id == after)
       const offset = index + 1
