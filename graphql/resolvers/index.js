@@ -143,21 +143,21 @@ const root = {
     try {
       const tasksFetched = await Task.find()
 
-      const first = args.body.variables.first || 6
+      const first = args.body.variables.first || 18
       const after = args.body.variables.after || ''
       const index = tasksFetched.findIndex(item => item._id == after)
       const offset = index + 1
 
-      const tasks = tasksFetched.slice(0, offset + first)
+      const tasks = tasksFetched.slice(0, offset + first) || []
       const lastTask = tasks[tasks.length - 1]
 
       return {
         pageInfo: {
-          endCursor: lastTask._id,
-          hasNextPage: offset + first < tasksFetched.length
+          endCursor: lastTask?._id,
+          hasNextPage: offset + first < tasksFetched?.length
         },
         edges: tasks.map(task => ({
-          cursor: task._id,
+          cursor: task?._id,
           node: task
         }))
       }
@@ -176,7 +176,7 @@ const root = {
   addTask: async ({ input }) => {
     try {
       const taskSlug = input.title.toLowerCase().split(' ').join('-')
-      const taskFetched = await Task.findOne({taskSlug}) // Разобраться, как возвращать ошибку по правильному
+      const taskFetched = await Task.findOne({taskSlug})
       if (taskFetched) throw 'Task already exist!'
 
       const date = new Date()
