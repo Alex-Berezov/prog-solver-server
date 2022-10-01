@@ -141,7 +141,7 @@ const root = {
   },
   getAllTasks: async (parent, args) => {
     try {
-      const tasksFetched = await Task.find()
+      const tasksFetched = await Task.find().sort({_id: -1})
 
       const first = args.body.variables.first || 18
       const after = args.body.variables.after || ''
