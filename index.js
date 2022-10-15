@@ -20,16 +20,6 @@ app.use('/graphql', graphqlHTTP({
 
 const start = async () => {
   try {
-    if (process.env.NODE_ENV === 'production') {
-      app.use(express.static(path.join(__dirname, '../client/prog-solver-client/pages')));
-
-      app.get('*', (req, res) =>
-        res.sendFile(
-          path.resolve(__dirname, '../', 'client', 'pages', 'index.js')
-        )
-      );
-    }
-
     await mongoose.connect(process.env.MONGO_URI)
 
     app.listen(PORT, () => {
