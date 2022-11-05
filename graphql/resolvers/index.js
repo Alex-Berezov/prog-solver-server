@@ -175,7 +175,12 @@ const root = {
   },
   addTask: async ({ input }) => {
     try {
-      const taskSlug = input.title.toLowerCase().split(' ').join('-').replace(/[#/\s?='":<>]/g, '')
+      const taskSlug = input.title
+        .toLowerCase()
+        .split(' ')
+        .join('-')
+        .replace(/[#/\s?='":<>]/g, '')
+        .replace(/(---)|(--)/g, '-')
       const taskFetched = await Task.findOne({taskSlug})
       if (taskFetched) throw 'Task already exist!'
 
