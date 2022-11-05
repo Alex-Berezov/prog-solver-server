@@ -181,7 +181,6 @@ const root = {
         .split(' ')
         .join('-')
         .replace(/[#/\s?='":<>,!*&^%$@)(+]/g, '')
-        .replace(/(---)|(--)|(.)|(..)|(...)/g, '-')
       const taskFetched = await Task.findOne({taskSlug})
       if (taskFetched) throw 'Task already exist!'
 
