@@ -177,10 +177,11 @@ const root = {
     try {
       const taskSlug = input.title
         .toLowerCase()
+        .trim()
         .split(' ')
         .join('-')
-        .replace(/[#/\s?='":<>]/g, '')
-        .replace(/(---)|(--)/g, '-')
+        .replace(/[#/\s?='":<>,!*&^%$@)(+]/g, '')
+        .replace(/(---)|(--)|(.)|(..)|(...)/g, '-')
       const taskFetched = await Task.findOne({taskSlug})
       if (taskFetched) throw 'Task already exist!'
 
